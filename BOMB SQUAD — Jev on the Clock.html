@@ -36,31 +36,33 @@
   }
 
   * { box-sizing: border-box; }
-  html, body {
-    margin: 0; min-height: 100%;
-    background: #0B0E14;
-    overflow-x: hidden;
+  
+  html {
+    min-height: 100%;
+    background: #EDF2F7;
   }
 
   body {
+    margin: 0;
+    min-height: 100vh;
     font-family: 'Chakra Petch', ui-monospace, sans-serif;
     color: var(--ink);
     display: flex;
     justify-content: center;
-    padding: calc(16px + env(safe-area-inset-top, 0px)) 12px calc(24px + env(safe-area-inset-bottom, 0px));
+    padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(36px + env(safe-area-inset-bottom, 0px));
     position: relative;
-    background:
-      linear-gradient(180deg, #F8FAFD 0%, #EDF2F7 100%);
+    background: radial-gradient(circle at 50% 0%, #FFFFFF 0%, #EDF2F7 60%, #E2E8F0 100%);
+    overflow-x: hidden;
   }
 
-  /* Animated Tactical Grid Floor */
+  /* Animated Cyber Grid Floor */
   body::before {
     content: "";
     position: fixed; inset: 0; pointer-events: none;
-    background-size: 40px 40px;
+    background-size: 36px 36px;
     background-image:
-      linear-gradient(to right, rgba(0, 102, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 102, 255, 0.05) 1px, transparent 1px);
+      linear-gradient(to right, rgba(0, 102, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 102, 255, 0.06) 1px, transparent 1px);
     z-index: 0;
   }
 
@@ -77,7 +79,7 @@
 
   /* Container */
   .arena-wrapper {
-    width: 100%; max-width: 960px; position: relative; z-index: 10;
+    width: 100%; max-width: 980px; position: relative; z-index: 10;
   }
 
   /* Top Bar */
@@ -104,46 +106,50 @@
   .audio-toggle {
     background: #0B1120; border: 1px solid var(--steel2);
     color: #FFFFFF; font-family: 'JetBrains Mono', monospace; font-size: 11px;
-    padding: 6px 12px; border-radius: 6px; cursor: pointer;
-    font-weight: 700; transition: all .15s ease;
+    padding: 7px 14px; border-radius: 8px; cursor: pointer;
+    font-weight: 800; transition: all .15s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   }
-  .audio-toggle:hover { background: #1E293B; border-color: var(--neon-cyan); }
-  .audio-toggle.active { color: var(--neon-green); border-color: var(--neon-green); box-shadow: 0 0 10px rgba(0,230,118,0.25); }
+  .audio-toggle:hover { background: #1E293B; border-color: var(--neon-cyan); transform: translateY(-1px); }
+  .audio-toggle.active { color: var(--neon-green); border-color: var(--neon-green); box-shadow: 0 0 12px rgba(0,230,118,0.3); }
 
   /* Giant Header */
-  header { text-align: center; margin-bottom: 14px; }
+  header { text-align: center; margin-bottom: 16px; }
   h1 {
     font-family: 'Orbitron', 'Bebas Neue', sans-serif;
     font-weight: 900;
     letter-spacing: .04em;
-    font-size: clamp(34px, 6.5vw, 54px);
+    font-size: clamp(34px, 6.5vw, 56px);
     margin: 4px 0 0;
-    line-height: .92;
+    line-height: .95;
     color: #0F172A;
     text-transform: uppercase;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    text-shadow: 0 3px 12px rgba(0,0,0,0.08);
   }
   h1 .accent-r1 {
     color: var(--neon-orange);
-    text-shadow: 0 0 20px rgba(255, 77, 0, 0.35);
+    text-shadow: 0 0 24px rgba(255, 77, 0, 0.45);
   }
   h1 .accent-jev {
     color: var(--neon-blue);
-    text-shadow: 0 0 20px rgba(0, 102, 255, 0.35);
+    text-shadow: 0 0 24px rgba(0, 102, 255, 0.45);
   }
 
   .tagline {
-    font-size: 12px; font-weight: 700; color: var(--dim);
-    letter-spacing: .08em; text-transform: uppercase; margin-top: 6px;
+    display: inline-block;
+    font-size: 12px; font-weight: 800; color: #475569;
+    letter-spacing: .12em; text-transform: uppercase; margin-top: 4px;
+    background: rgba(255,255,255,0.7); padding: 4px 12px; border-radius: 999px;
+    border: 1px solid var(--steel2);
   }
 
   /* Tactical Opponent Selector */
   .control-dock {
     background: #FFFFFF;
     border: 2px solid var(--steel2);
-    border-radius: 12px;
-    padding: 12px 16px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+    border-radius: 14px;
+    padding: 14px 18px;
+    box-shadow: 0 10px 32px rgba(0,0,0,0.06);
     display: flex; flex-direction: column; align-items: center; gap: 12px;
     margin-bottom: 16px;
     position: relative;
@@ -155,47 +161,48 @@
   }
 
   .opp-tabs {
-    display: flex; gap: 8px; background: #F1F5F9; padding: 4px; border-radius: 8px;
+    display: flex; gap: 10px; background: #F1F5F9; padding: 5px; border-radius: 10px;
     border: 1px solid var(--steel2);
   }
   .opp-tab {
-    display: flex; align-items: center; gap: 6px;
-    padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 800;
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 18px; border-radius: 8px; font-size: 12px; font-weight: 800;
     cursor: pointer; transition: all .15s ease; color: var(--dim); user-select: none;
   }
   .opp-tab input { display: none; }
+  .opp-tab:hover { color: var(--ink); background: #E2E8F0; }
   .opp-tab.selected {
     background: #0F172A; color: #FFFFFF;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 3px 12px rgba(0,0,0,0.2);
   }
   .opp-tab.selected.tab-r1 {
-    background: #FF4D00; color: #FFFFFF; box-shadow: 0 0 15px rgba(255, 77, 0, 0.4);
+    background: #FF4D00; color: #FFFFFF; box-shadow: 0 0 18px rgba(255, 77, 0, 0.45);
   }
   .opp-tab.selected.tab-nova {
-    background: #0066FF; color: #FFFFFF; box-shadow: 0 0 15px rgba(0, 102, 255, 0.4);
+    background: #0066FF; color: #FFFFFF; box-shadow: 0 0 18px rgba(0, 102, 255, 0.45);
   }
 
   /* Big Arm Button */
   .startbtn {
     background: linear-gradient(135deg, #FF003C 0%, #D50000 100%);
     color: #FFFFFF; border: none;
-    border-radius: 8px; padding: 14px 42px;
-    font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900;
+    border-radius: 10px; padding: 14px 44px;
+    font-family: 'Orbitron', sans-serif; font-size: 19px; font-weight: 900;
     letter-spacing: .08em; cursor: pointer;
-    box-shadow: 0 8px 25px rgba(255, 0, 60, 0.35), inset 0 2px 0 rgba(255,255,255,0.3);
+    box-shadow: 0 8px 25px rgba(255, 0, 60, 0.4), inset 0 2px 0 rgba(255,255,255,0.3);
     text-transform: uppercase;
-    transition: transform .1s ease, box-shadow .15s ease, filter .15s ease;
+    transition: transform .12s ease, box-shadow .15s ease, filter .15s ease;
     display: inline-flex; align-items: center; gap: 10px;
     position: relative; overflow: hidden;
   }
   .startbtn::after {
     content: ""; position: absolute; inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-    transform: translateX(-100%); transition: transform .5s ease;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: translateX(-100%); transition: transform .6s ease;
   }
   .startbtn:hover:not(:disabled) {
     transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 12px 30px rgba(255, 0, 60, 0.5);
+    box-shadow: 0 12px 32px rgba(255, 0, 60, 0.6);
   }
   .startbtn:hover:not(:disabled)::after { transform: translateX(100%); }
   .startbtn:active:not(:disabled) { transform: translateY(1px); }
@@ -203,17 +210,20 @@
 
   /* Clue Box with High-Tech Decals */
   .clue-banner {
-    display: none;
+    display: block;
     background: #FFFFFF;
     border: 2px solid #0F172A;
-    border-radius: 12px;
+    border-radius: 14px;
     padding: 16px 20px;
     margin-bottom: 16px;
     position: relative;
     box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    transition: all .2s ease;
   }
-  .clue-banner.show { display: block; animation: dropIn .25s ease-out; }
-  @keyframes dropIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  .clue-banner.active-round {
+    border-color: var(--neon-red);
+    box-shadow: 0 0 25px rgba(255, 0, 60, 0.2);
+  }
 
   .clue-top {
     display: flex; justify-content: space-between; align-items: center;
@@ -224,22 +234,22 @@
     color: var(--neon-red); letter-spacing: .08em;
   }
   .clue-status {
-    font-size: 10px; font-weight: 800; color: var(--dim); letter-spacing: .1em;
-    background: var(--steel); padding: 3px 8px; border-radius: 4px;
+    font-size: 10px; font-weight: 800; color: #475569; letter-spacing: .1em;
+    background: #F1F5F9; padding: 4px 10px; border-radius: 6px;
+    border: 1px solid var(--steel2); text-transform: uppercase;
   }
   .clue-text {
     font-family: 'Chakra Petch', sans-serif;
     font-size: 16px; font-weight: 700; line-height: 1.5; color: #0F172A;
   }
 
-  /* Duel Arena */
+  /* Duel Arena (Always Visible In Standby & Duel) */
   .arena {
-    display: none;
+    display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-bottom: 16px;
   }
-  .arena.show { display: grid; }
   @media (max-width: 720px) {
     .arena { grid-template-columns: 1fr; }
   }
@@ -279,7 +289,7 @@
 
   .arch-chip {
     font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 4px;
-    background: var(--steel); color: var(--dim);
+    background: var(--steel); color: #475569;
     letter-spacing: .05em; font-family: 'JetBrains Mono', monospace;
   }
 
@@ -343,12 +353,43 @@
     background: #F8FAFD; border: 2px solid var(--steel2);
     border-radius: 10px; padding: 10px 14px;
     position: relative; overflow: hidden;
-    transition: transform .12s ease, border-color .15s ease, background .15s ease, box-shadow .15s ease;
+    cursor: pointer;
+    transition: transform .15s ease, border-color .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .wire-card:hover {
+    transform: translateX(4px);
+    background: #FFFFFF;
+    border-color: #94A3B8;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  }
+
+  /* Braided Cable with Electric Current */
+  .wire-card .cable-housing {
+    display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+  }
+  .wire-card .terminal-screw {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #CBD5E1; border: 1px solid #94A3B8;
+    box-shadow: inset 0 1px 1px #FFFFFF;
   }
   .wire-card .cable {
-    width: 44px; height: 10px; border-radius: 5px; flex-shrink: 0;
+    width: 48px; height: 11px; border-radius: 5px; flex-shrink: 0;
     position: relative; box-shadow: inset 0 2px 2px rgba(255,255,255,0.4), 0 2px 4px rgba(0,0,0,0.15);
+    overflow: hidden;
   }
+
+  /* Electric current pulse running through wire cables */
+  .wire-card .cable::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.85) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: wireCurrent 1.4s infinite linear;
+  }
+  @keyframes wireCurrent {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
   .wire-card[data-wire="red"] .cable { background: #EF4444; }
   .wire-card[data-wire="blue"] .cable { background: #2563EB; }
   .wire-card[data-wire="yellow"] .cable { background: #EAB308; }
@@ -398,11 +439,11 @@
     100% { width: 100%; left: 0; opacity: 1; background: #FFFFFF; }
   }
 
-  /* Mega Verdict Banner */
+  /* Verdict Banner */
   .verdict-banner {
     min-height: 48px; border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
-    font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900;
+    font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900;
     letter-spacing: .06em;
     background: #F1F5F9; color: var(--dim); border: 2px dashed var(--steel2);
     text-transform: uppercase; transition: all .15s ease;
@@ -445,12 +486,12 @@
   .raw-preview.show { display: block; }
 
   /* Crazy Screen & Lane Shakes */
-  .stage.heavy-shake { animation: heavyShake .45s cubic-bezier(.36,.07,.19,.97) both; }
+  .arena-wrapper.heavy-shake { animation: heavyShake .45s cubic-bezier(.36,.07,.19,.97) both; }
   @keyframes heavyShake {
-    10%, 90% { transform: translate3d(-3px, 0, 0); }
-    20%, 80% { transform: translate3d(5px, -2px, 0); }
-    30%, 50%, 70% { transform: translate3d(-7px, 4px, 0); }
-    40%, 60% { transform: translate3d(7px, -4px, 0); }
+    10%, 90% { transform: translate3d(-4px, 0, 0); }
+    20%, 80% { transform: translate3d(6px, -3px, 0); }
+    30%, 50%, 70% { transform: translate3d(-8px, 5px, 0); }
+    40%, 60% { transform: translate3d(8px, -5px, 0); }
   }
 
   .lane.lane-shake { animation: lanePulse .35s ease; }
@@ -469,7 +510,7 @@
   .flash-layer.safe { background: radial-gradient(circle at 50% 50%, rgba(0, 230, 118, 0.35), transparent 70%); }
   .flash-layer.danger { background: radial-gradient(circle at 50% 50%, rgba(255, 0, 60, 0.45), transparent 70%); }
 
-  /* Pure Gaming Esports End Card */
+  /* Esports End Card */
   .endcard {
     display: none;
     background: #FFFFFF;
@@ -477,8 +518,9 @@
     border-radius: 20px;
     padding: 28px 24px;
     text-align: center;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.12);
     position: relative; overflow: hidden;
+    margin-bottom: 20px;
   }
   .endcard.show { display: block; animation: endcardPop .3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
   @keyframes endcardPop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
@@ -534,9 +576,18 @@
   }
   .replay-btn:hover { background: #1E293B; transform: translateY(-2px); }
 
+  /* High Tech Cyber Footer */
   footer {
-    text-align: center; color: var(--dim); font-size: 11px; font-weight: 700;
-    margin-top: 20px; line-height: 1.5; letter-spacing: .02em;
+    text-align: center; margin-top: 24px; padding-top: 14px;
+    border-top: 1px dashed var(--steel2);
+  }
+  .footer-badge {
+    font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900;
+    color: #475569; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .footer-specs {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+    color: var(--dim); letter-spacing: .05em; text-transform: uppercase;
   }
 </style>
 </head>
@@ -580,20 +631,20 @@
   <!-- Shared Clue Panel -->
   <div class="clue-banner" id="clueBanner">
     <div class="clue-top">
-      <span class="roundTag" id="roundTag">ROUND 1 / 6</span>
-      <span class="clue-status">DEVICE ACTIVE // TIME-CRITICAL</span>
+      <span class="roundTag" id="roundTag">STANDBY // READY</span>
+      <span class="clue-status" id="clueStatus">ARMING SEQUENCE ARMED</span>
     </div>
-    <div class="clue-text" id="clueText">Awaiting arming sequence…</div>
+    <div class="clue-text" id="clueText">⚡ HIGH-VOLTAGE RIGS ARMED AND READY. CHOOSE OPPONENT ARCHITECTURE ABOVE AND PRESS [ARM THE DUEL] TO INITIATE LIVE HEAD-TO-HEAD WIRE CUTTING.</div>
   </div>
 
-  <!-- Dual Arena Grid -->
+  <!-- Dual Arena Grid (Visible On Load) -->
   <div class="arena" id="arena">
     
     <!-- LANE 1: JEV (TypeSafe AI) -->
     <div class="lane jev-lane" id="laneJev">
       <div class="lane-head">
         <span class="lane-tag">⚡ JEV</span>
-        <span class="arch-chip">System One // 100% Strict Choice</span>
+        <span class="arch-chip">SYSTEM 1 // ~350MS REFLEX</span>
       </div>
 
       <div class="stats-grid">
@@ -611,7 +662,7 @@
       </div>
 
       <div class="wires-terminal" id="jevWires"></div>
-      <div class="verdict-banner" id="jevVerdict">WAITING…</div>
+      <div class="verdict-banner" id="jevVerdict">⚡ SYSTEM 1 STANDBY</div>
     </div>
 
     <!-- LANE 2: BEDROCK RACER -->
@@ -636,7 +687,7 @@
       </div>
 
       <div class="wires-terminal" id="racerWires"></div>
-      <div class="verdict-banner" id="racerVerdict">WAITING…</div>
+      <div class="verdict-banner" id="racerVerdict">🧠 BEDROCK STANDBY</div>
       <div class="raw-preview" id="racerRawPreview"></div>
     </div>
 
@@ -669,13 +720,13 @@
   </div>
 
   <footer>
-    Bomb Squad Extreme Arena: TypeSafe AI Jev (Vercel Gateway) vs. Amazon Bedrock (DeepSeek R1 / Nova Micro).
-    Wire cuts, decision latency, and reasoning behavior are executed live.
+    <div class="footer-badge">⚡ CYBERNETIC WIRE DEFUSAL // REAL-TIME ARENA PROTOCOL ⚡</div>
+    <div class="footer-specs">SYSTEM 1 REFLEX SPEED [JEV] VS SYSTEM 2 DEEP REASONING [BEDROCK] • DETERMINISTIC EVAL</div>
   </footer>
 </div>
 
 <script>
-// --- PROCEDURAL WEB AUDIO SYNTHESIZER ---
+// --- PROCEDURAL HIGH-OCTANE WEB AUDIO SYNTHESIZER ---
 let audioCtx = null;
 let soundEnabled = true;
 
@@ -688,64 +739,169 @@ function initAudio() {
     audioCtx.resume();
   }
 }
+window.addEventListener('pointerdown', () => initAudio(), { once: true });
 
-function playTickSound() {
+// UI Hover Sound
+function playHoverSound() {
   if (!soundEnabled || !audioCtx) return;
   try {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(1400, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.03);
-    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+    osc.frequency.setValueAtTime(2200, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.025);
+    gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.025);
     osc.connect(gain);
     gain.connect(audioCtx.destination);
     osc.start();
-    osc.stop(audioCtx.currentTime + 0.03);
+    osc.stop(audioCtx.currentTime + 0.025);
   } catch(e){}
 }
 
-function playSnipSound() {
+// Arm Siren / Charge-up Sweep
+function playArmSiren() {
   if (!soundEnabled || !audioCtx) return;
   try {
     const osc = audioCtx.createOscillator();
+    const sub = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.07);
-    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.07);
-    osc.connect(gain);
+    const now = audioCtx.currentTime;
+
+    osc.type = 'sawtooth';
+    sub.type = 'sine';
+    osc.frequency.setValueAtTime(180, now);
+    osc.frequency.exponentialRampToValueAtTime(880, now + 0.45);
+    sub.frequency.setValueAtTime(90, now);
+    sub.frequency.exponentialRampToValueAtTime(440, now + 0.45);
+
+    gain.gain.setValueAtTime(0.01, now);
+    gain.gain.linearRampToValueAtTime(0.18, now + 0.35);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(400, now);
+    filter.frequency.exponentialRampToValueAtTime(2400, now + 0.4);
+
+    osc.connect(filter);
+    sub.connect(filter);
+    filter.connect(gain);
     gain.connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.07);
+
+    osc.start(now);
+    sub.start(now);
+    osc.stop(now + 0.5);
+    sub.stop(now + 0.5);
   } catch(e){}
 }
 
+// Tension Countdown Tick / Sub-Tock
+let tickToggle = false;
+function playTickSound() {
+  if (!soundEnabled || !audioCtx) return;
+  try {
+    tickToggle = !tickToggle;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const now = audioCtx.currentTime;
+
+    if (tickToggle) {
+      // High crisp mechanical tick
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1800, now);
+      osc.frequency.exponentialRampToValueAtTime(350, now + 0.025);
+      gain.gain.setValueAtTime(0.09, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.025);
+    } else {
+      // Low tension sub tock
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(320, now);
+      osc.frequency.exponentialRampToValueAtTime(70, now + 0.04);
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.04);
+    }
+  } catch(e){}
+}
+
+// High-Voltage Laser Wire Snip
+function playSnipSound() {
+  if (!soundEnabled || !audioCtx) return;
+  try {
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(1200, now);
+    osc.frequency.exponentialRampToValueAtTime(110, now + 0.08);
+
+    gain.gain.setValueAtTime(0.24, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+    // Filter snap
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(1800, now);
+    filter.Q.value = 3;
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + 0.08);
+  } catch(e){}
+}
+
+// Victory Defuse Fanfare
 function playDefuseSound() {
   if (!soundEnabled || !audioCtx) return;
   try {
-    const freqs = [440, 554, 659, 880];
+    const freqs = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C5, E5, G5, C6, E6
     freqs.forEach((f, i) => {
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
+      const now = audioCtx.currentTime + i * 0.045;
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(f, audioCtx.currentTime + i * 0.05);
-      gain.gain.setValueAtTime(0.12, audioCtx.currentTime + i * 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.05 + 0.2);
+      osc.frequency.setValueAtTime(f, now);
+      gain.gain.setValueAtTime(0.14, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
       osc.connect(gain);
       gain.connect(audioCtx.destination);
-      osc.start(audioCtx.currentTime + i * 0.05);
-      osc.stop(audioCtx.currentTime + i * 0.05 + 0.2);
+      osc.start(now);
+      osc.stop(now + 0.25);
     });
   } catch(e){}
 }
 
+// Massive 808 Sub-Bass Explosion
 function playBoomSound() {
   if (!soundEnabled || !audioCtx) return;
   try {
-    const bufferSize = audioCtx.sampleRate * 0.35;
+    const now = audioCtx.currentTime;
+    
+    // Sub-bass sine drop
+    const subOsc = audioCtx.createOscillator();
+    const subGain = audioCtx.createGain();
+    subOsc.type = 'sine';
+    subOsc.frequency.setValueAtTime(160, now);
+    subOsc.frequency.exponentialRampToValueAtTime(26, now + 0.5);
+    subGain.gain.setValueAtTime(0.45, now);
+    subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+    subOsc.connect(subGain);
+    subGain.connect(audioCtx.destination);
+    subOsc.start(now);
+    subOsc.stop(now + 0.55);
+
+    // Distorted noise burst
+    const bufferSize = audioCtx.sampleRate * 0.4;
     const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
     const data = buffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) {
@@ -755,24 +911,45 @@ function playBoomSound() {
     noise.buffer = buffer;
     const filter = audioCtx.createBiquadFilter();
     filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(220, audioCtx.currentTime);
-    filter.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.35);
+    filter.frequency.setValueAtTime(450, now);
+    filter.frequency.exponentialRampToValueAtTime(40, now + 0.4);
 
-    const gain = audioCtx.createGain();
-    gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+    const noiseGain = audioCtx.createGain();
+    noiseGain.gain.setValueAtTime(0.35, now);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
 
     noise.connect(filter);
-    filter.connect(gain);
-    gain.connect(audioCtx.destination);
-    noise.start();
+    filter.connect(noiseGain);
+    noiseGain.connect(audioCtx.destination);
+    noise.start(now);
   } catch(e){}
 }
 
-// --- PARTICLE / SPARKS CANVAS ENGINE ---
+// Glitch Stutter Buzz
+function playGlitchSound() {
+  if (!soundEnabled || !audioCtx) return;
+  try {
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(240, now);
+    osc.frequency.setValueAtTime(480, now + 0.05);
+    osc.frequency.setValueAtTime(160, now + 0.1);
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + 0.25);
+  } catch(e){}
+}
+
+// --- PARTICLE / SHOCKWAVE CANVAS ENGINE ---
 const canvas = document.getElementById('fxCanvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
+let shockwaves = [];
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
@@ -781,29 +958,56 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-function emitSparks(x, y, color, count = 28) {
+function emitSparks(x, y, color, count = 32) {
   for (let i = 0; i < count; i++) {
     const angle = Math.random() * Math.PI * 2;
-    const speed = 2 + Math.random() * 7;
+    const speed = 2 + Math.random() * 8;
     particles.push({
       x, y,
       vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed - 1,
+      vy: Math.sin(angle) * speed - 1.5,
       color,
-      size: 2 + Math.random() * 3,
+      size: 2 + Math.random() * 3.5,
       alpha: 1,
       decay: 0.02 + Math.random() * 0.03
     });
   }
 }
 
+function emitShockwave(x, y, color, maxRadius = 120) {
+  shockwaves.push({
+    x, y, color, radius: 4, maxRadius, alpha: 1, decay: 0.035
+  });
+}
+
 function fxLoop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Shockwaves
+  for (let i = shockwaves.length - 1; i >= 0; i--) {
+    const sw = shockwaves[i];
+    sw.radius += (sw.maxRadius - sw.radius) * 0.15;
+    sw.alpha -= sw.decay;
+    if (sw.alpha <= 0) {
+      shockwaves.splice(i, 1);
+      continue;
+    }
+    ctx.save();
+    ctx.globalAlpha = sw.alpha;
+    ctx.strokeStyle = sw.color;
+    ctx.lineWidth = 4 * sw.alpha;
+    ctx.beginPath();
+    ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Sparks
   for (let i = particles.length - 1; i >= 0; i--) {
     const p = particles[i];
     p.x += p.vx;
     p.y += p.vy;
-    p.vy += 0.15; // gravity
+    p.vy += 0.16; // gravity
     p.alpha -= p.decay;
     if (p.alpha <= 0) {
       particles.splice(i, 1);
@@ -817,6 +1021,7 @@ function fxLoop() {
     ctx.fill();
     ctx.restore();
   }
+
   requestAnimationFrame(fxLoop);
 }
 fxLoop();
@@ -848,6 +1053,7 @@ const startBtn = el('startBtn');
 const errMsg = el('errMsg');
 const clueBanner = el('clueBanner');
 const roundTag = el('roundTag');
+const clueStatus = el('clueStatus');
 const clueText = el('clueText');
 const arena = el('arena');
 
@@ -878,7 +1084,7 @@ let state = {
   racer: { correct: 0, streak: 0, bestStreak: 0, totalMs: 0, malfunctions: 0 }
 };
 
-// Flash & Shakes
+// Flash & Screen Shake
 function doFlash(kind) {
   flashLayer.className = 'flash-layer ' + kind + ' on';
   requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -914,12 +1120,15 @@ function updateOpponentUI() {
   const titleName = isDeepSeek ? 'DEEPSEEK R1' : 'NOVA MICRO';
   el('racerTitle').textContent = titleName;
   racerTag.textContent = isDeepSeek ? '🧠 DEEPSEEK R1' : '⚡ NOVA MICRO';
-  racerArch.textContent = isDeepSeek ? 'AWS Bedrock // us.deepseek.r1' : 'AWS Bedrock // amazon.nova';
+  racerArch.textContent = isDeepSeek ? 'SYSTEM 2 // REASONING CORE' : 'FAST LLM // MICRO LATENCY';
   racerPodiumTitle.innerHTML = isDeepSeek ? '🧠 DEEPSEEK R1 <span class="arch-chip">REASONING</span>' : '⚡ NOVA MICRO <span class="arch-chip">FAST LLM</span>';
 }
 
 document.querySelectorAll('input[name="bedrockModel"]').forEach(radio => {
-  radio.addEventListener('change', updateOpponentUI);
+  radio.addEventListener('change', () => {
+    playHoverSound();
+    updateOpponentUI();
+  });
 });
 
 // Audio Toggle
@@ -928,6 +1137,12 @@ el('audioToggle').addEventListener('click', () => {
   soundEnabled = !soundEnabled;
   el('audioToggle').textContent = soundEnabled ? '🔊 SFX ON' : '🔇 SFX OFF';
   el('audioToggle').classList.toggle('active', soundEnabled);
+  if (soundEnabled) playHoverSound();
+});
+
+// Hover SFX on buttons & tabs
+[startBtn, replayBtn, el('tabR1'), el('tabNova')].forEach(btn => {
+  btn.addEventListener('mouseenter', () => playHoverSound());
 });
 
 function getApiBase() {
@@ -941,16 +1156,39 @@ function renderLaneWires(container, options) {
     card.className = 'wire-card';
     card.dataset.wire = key;
     card.innerHTML = `
-      <div class="cable"></div>
+      <div class="cable-housing">
+        <span class="terminal-screw"></span>
+        <div class="cable"></div>
+        <span class="terminal-screw"></span>
+      </div>
       <div class="wire-text">
         <span>${key.toUpperCase()} LEAD</span>
         <span class="wire-sub">${options[key]}</span>
       </div>
       <div class="confidence-tag">--%</div>
     `;
+    card.addEventListener('mouseenter', () => playHoverSound());
+    card.addEventListener('click', (e) => {
+      // Interactive spark click for fun!
+      initAudio();
+      playSnipSound();
+      const rect = card.getBoundingClientRect();
+      const wireColors = { red:'#EF4444', blue:'#2563EB', yellow:'#EAB308', purple:'#A855F7' };
+      emitSparks(rect.left + 50, rect.top + rect.height/2, wireColors[key] || '#00D2FF', 16);
+    });
     container.appendChild(card);
   });
 }
+
+// Standby default wires on load
+const STANDBY_WIRES = {
+  red: 'PRIMARY FIRING CORE // HIGH VOLTAGE',
+  blue: 'FEEDBACK SUPPRESSOR // CRYOGENIC',
+  yellow: 'POLARITY GROUND // SHUNT RELAY',
+  purple: 'NEURAL LOGIC BYPASS // OPTOCOUPLER'
+};
+renderLaneWires(jevWires, STANDBY_WIRES);
+renderLaneWires(racerWires, STANDBY_WIRES);
 
 // API Calls
 async function callJev(round) {
@@ -1001,11 +1239,13 @@ async function callBedrockOpponent(round) {
 async function playRound(round, idx) {
   updateOpponentUI();
   roundTag.textContent = `ROUND ${idx + 1} / ${state.rounds.length}`;
+  clueStatus.textContent = 'DEVICE ARMED // PARALLEL RACE ACTIVE';
   clueText.textContent = round.clue;
+  clueBanner.classList.add('active-round');
 
   // Reset visuals
-  jevVerdict.className = 'verdict-banner'; jevVerdict.textContent = 'DEFUSING…';
-  racerVerdict.className = 'verdict-banner'; racerVerdict.textContent = 'DEFUSING…';
+  jevVerdict.className = 'verdict-banner'; jevVerdict.textContent = 'CUTTING WIRE…';
+  racerVerdict.className = 'verdict-banner'; racerVerdict.textContent = 'REASONING…';
   racerRawPreview.className = 'raw-preview'; racerRawPreview.textContent = '';
   jevFastest.classList.remove('show');
   racerFastest.classList.remove('show');
@@ -1018,7 +1258,7 @@ async function playRound(round, idx) {
   let racerDone = false;
   let firstResponder = null;
 
-  // Continuous live millisecond ticker & tick sound
+  // Continuous live millisecond ticker & rhythmic tick sound
   const timerInterval = setInterval(() => {
     const elapsed = Math.round(performance.now() - startT);
     if (!jevDone) jevMs.textContent = `${elapsed} ms`;
@@ -1043,7 +1283,8 @@ async function playRound(round, idx) {
     if (wireEl) {
       playSnipSound();
       const rect = wireEl.getBoundingClientRect();
-      emitSparks(rect.left + 50, rect.top + rect.height / 2, '#00D2FF', 24);
+      emitSparks(rect.left + 50, rect.top + rect.height / 2, '#00D2FF', 28);
+      emitShockwave(rect.left + 50, rect.top + rect.height / 2, '#00D2FF', 80);
       wireEl.classList.add('chosen', isCorrect ? 'correct' : 'wrong', 'cut');
       wireEl.querySelector('.confidence-tag').textContent = `${Math.round((jevData.confidence || 0) * 100)}%`;
     }
@@ -1071,7 +1312,7 @@ async function playRound(round, idx) {
   }).catch(err => {
     jevDone = true;
     jevMs.textContent = 'ERR';
-    jevVerdict.textContent = 'CONNECTION LOST';
+    jevVerdict.textContent = 'GATEWAY ERROR';
     jevVerdict.classList.add('danger');
     doLaneShake(laneJev);
     throw err;
@@ -1089,6 +1330,7 @@ async function playRound(round, idx) {
     }
 
     if (racerData.error === 'parse_failed') {
+      playGlitchSound();
       playBoomSound();
       doHeavyShake();
       state.racer.malfunctions++;
@@ -1105,7 +1347,8 @@ async function playRound(round, idx) {
       if (wireEl) {
         playSnipSound();
         const rect = wireEl.getBoundingClientRect();
-        emitSparks(rect.left + 50, rect.top + rect.height / 2, '#FFB300', 24);
+        emitSparks(rect.left + 50, rect.top + rect.height / 2, '#FFB300', 28);
+        emitShockwave(rect.left + 50, rect.top + rect.height / 2, '#FFB300', 80);
         wireEl.classList.add('chosen', isCorrect ? 'correct' : 'wrong', 'cut');
         wireEl.querySelector('.confidence-tag').textContent = `${Math.round((racerData.confidence || 0) * 100)}%`;
       }
@@ -1144,17 +1387,17 @@ async function playRound(round, idx) {
     await Promise.allSettled([jevPromise, racerPromise]);
   } finally {
     clearInterval(timerInterval);
+    clueBanner.classList.remove('active-round');
   }
 }
 
 // Main Game Controller
 async function runGame() {
   initAudio();
+  playArmSiren();
   errMsg.textContent = '';
   startBtn.disabled = true;
   controlDock.style.display = 'none';
-  clueBanner.classList.add('show');
-  arena.classList.add('show');
   endcard.classList.remove('show');
 
   state = {
@@ -1178,9 +1421,6 @@ async function runGame() {
   }
 
   // Final Endcard Showdown
-  clueBanner.classList.remove('show');
-  arena.classList.remove('show');
-
   const jevAvgMs = Math.round(state.jev.totalMs / state.rounds.length);
   const racerAvgMs = Math.round(state.racer.totalMs / state.rounds.length);
   const modelType = getSelectedBedrockModel();
@@ -1215,6 +1455,7 @@ startBtn.addEventListener('click', runGame);
 replayBtn.addEventListener('click', () => {
   endcard.classList.remove('show');
   controlDock.style.display = 'flex';
+  playHoverSound();
 });
 
 // Initialize UI

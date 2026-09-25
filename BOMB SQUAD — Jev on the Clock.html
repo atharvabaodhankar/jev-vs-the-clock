@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BOMB SQUAD — Jev vs. Nova Micro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="rounds.js"></script>
+<style>
+  :root {
+    --bg0: #F1F4F9;
+    --bg1: #FFFFFF;
+    --steel: #F8FAFC;
+    --steel2: #E2E8F0;
+    --steel3: #CBD5E1;
+    --ink: #0F172A;
+    --ink-soft: #334155;
+    --dim: #64748B;
+
+    --amber: #D97706;
+    --amber-soft: #FEF3C7;
+    --danger: #DC2626;
+    --danger-soft: #FEE2E2;
+    --safe: #16A34A;
+    --safe-soft: #DCFCE7;
+    --malfunc: #7E22CE;
+    --malfunc-soft: #F3E8FF;
+
+    --wire-red: #EF4444;
+    --wire-blue: #2563EB;
+    --wire-yellow: #EAB308;
+    --wire-purple: #A855F7;
+
+    /* JEV Lane Cool Accent */
+    --jev-brand: #2563EB;
+    --jev-soft: #EFF6FF;
+    --jev-border: #BFDBFE;
+
+    /* NOVA Lane Warm Accent */
+    --nova-brand: #EA580C;
+    --nova-soft: #FFF7ED;
+    --nova-border: #FED7AA;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: var(--bg0); }
+  body {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    color: var(--ink);
+    display: flex;
+    justify-content: center;
+    padding: calc(20px + env(safe-area-inset-top, 0px)) 16px calc(24px + env(safe-area-inset-bottom, 0px));
+    background:
+      radial-gradient(circle at 50% 0%, rgba(37, 99, 235, 0.04), transparent 50%),
+      repeating-linear-gradient(0deg, rgba(15, 23, 42, 0.015) 0px, rgba(15, 23, 42, 0.015) 1px, transparent 1px, transparent 4px),
+      var(--bg0);
+  }
+
+  .stage { width: 100%; max-width: 900px; position: relative; }
+
+  /* Header */
+  header { text-align: center; margin-bottom: 16px; }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #FFFFFF;
+    border: 1px solid var(--steel2);
+    border-radius: 999px;
+    padding: 4px 12px;
+    color: var(--danger);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--danger); animation: pdot 1s infinite alternate; }
+  @keyframes pdot { from { opacity: 0.3; } to { opacity: 1; } }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 400;
+    letter-spacing: .03em;
+    font-size: clamp(34px, 7vw, 52px);
+    margin: 6px 0 2px;
+    line-height: .95;
+    color: var(--ink);
+  }
+  .subhead {
+    font-size: 12px;
+    color: var(--dim);
+    margin-bottom: 14px;
+    letter-spacing: .02em;
+  }
+  .subhead span.vs {
+    font-weight: 800;
+    color: var(--danger);
+    padding: 0 4px;
+  }
+
+  /* Setup & Button */
+  .setup { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .startbtn {
+    background: linear-gradient(180deg, #DC2626, #B91C1C);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 28px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: .06em;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transition: transform .1s ease, box-shadow .1s ease;
+  }
+  .startbtn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(220, 38, 38, 0.32); }
+  .startbtn:active:not(:disabled) { transform: translateY(1px); }
+  .startbtn:disabled { opacity: .45; cursor: not-allowed; }
+  .err { color: var(--danger); font-size: 12px; min-height: 16px; text-align: center; }
+
+  /* Shared Round Clue Panel */
+  .clue-banner {
+    display: none;
+    background: var(--bg1);
+    border: 1px solid var(--steel2);
+    border-left: 4px solid var(--danger);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  }
+  .clue-banner.show { display: block; }
+  .clue-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .roundTag { color: var(--danger); letter-spacing: .08em; }
+  .clue-title { color: var(--dim); letter-spacing: .05em; font-size: 10.5px; }
+  .clue-text { font-size: 14px; line-height: 1.5; color: var(--ink); font-weight: 600; }
+
+  /* Head to Head Duel Arena */
+  .arena {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .arena.show { display: grid; }
+  @media (max-width: 680px) {
+    .arena { grid-template-columns: 1fr; }
+  }
+
+  /* Lane Cards */
+  .lane {
+    background: var(--bg1);
+    border: 2px solid var(--steel2);
+    border-radius: 14px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .lane.jev-lane { border-color: var(--jev-border); background: linear-gradient(180deg, #FFFFFF, var(--jev-soft) 120%); }
+  .lane.nova-lane { border-color: var(--nova-border); background: linear-gradient(180deg, #FFFFFF, var(--nova-soft) 120%); }
+
+  /* Lane Headers */
+  .lane-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--steel2);
+    margin-bottom: 12px;
+  }
+  .model-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .04em;
+  }
+  .jev-lane .model-pill { background: #DBEAFE; color: var(--jev-brand); }
+  .nova-lane .model-pill { background: #FFEDD5; color: var(--nova-brand); }
+  .model-arch { font-size: 10px; color: var(--dim); font-weight: 600; }
+
+  /* Lane HUD Strip */
+  .lane-hud {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .lane-hud .cell {
+    background: var(--steel);
+    border: 1px solid var(--steel2);
+    border-radius: 6px;
+    padding: 6px 4px;
+    text-align: center;
+  }
+  .lane-hud .n {
+    display: block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 19px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .lane-hud .l { font-size: 8.5px; color: var(--dim); letter-spacing: .04em; text-transform: uppercase; font-weight: 700; }
+
+  /* Lane Timer & Ring */
+  .lane-timer-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--steel);
+    border: 1px solid var(--steel2);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 14px;
+  }
+  .ring-wrap { position: relative; width: 40px; height: 40px; flex-shrink: 0; }
+  .ring-wrap svg { transform: rotate(-90deg); }
+  .ring-wrap circle { fill: none; stroke-width: 4.5; }
+  .ring-wrap .bg { stroke: var(--steel3); }
+  .ring-wrap .fg { stroke-linecap: round; transition: stroke-dashoffset linear; }
+  .jev-lane .fg { stroke: var(--jev-brand); }
+  .nova-lane .fg { stroke: var(--nova-brand); }
+  .speed-tag { font-size: 11px; font-weight: 700; color: var(--dim); display: flex; flex-direction: column; }
+  .speed-tag span.ms-val { font-family: 'Bebas Neue', sans-serif; font-size: 20px; line-height: 1; color: var(--ink); }
+  .fastest-badge {
+    display: none;
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #FEF3C7;
+    color: #B45309;
+    border: 1px solid #FDE68A;
+    letter-spacing: .04em;
+  }
+  .fastest-badge.show { display: inline-block; }
+
+  /* Wires */
+  .wires { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .wire {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 10px;
+    background: #FFFFFF;
+    border: 1px solid var(--steel2);
+    border-radius: 7px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  }
+  .wire .strand { width: 28px; height: 6px; border-radius: 3px; flex-shrink: 0; }
+  .wire .label { font-size: 11.5px; font-weight: 700; color: var(--ink-soft); flex: 1; }
+  .wire .stamp {
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    opacity: 0;
+    transform: scale(.7);
+    transition: opacity .12s ease, transform .12s ease;
+  }
+  .wire.chosen .stamp { opacity: 1; transform: scale(1); }
+  
+  /* Wire Verdict States */
+  .wire.correct {
+    border-color: var(--safe);
+    background: #F0FDF4;
+    box-shadow: 0 0 0 1px var(--safe), 0 2px 8px rgba(22, 163, 74, 0.15);
+  }
+  .wire.correct .stamp { background: #DCFCE7; color: var(--safe); }
+
+  .wire.wrong {
+    border-color: var(--danger);
+    background: #FEF2F2;
+    box-shadow: 0 0 0 1px var(--danger), 0 2px 8px rgba(220, 38, 38, 0.15);
+  }
+  .wire.wrong .stamp { background: #FEE2E2; color: var(--danger); }
+
+  .wire.cut .strand { position: relative; }
+  .wire.cut .strand::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #FFFFFF;
+    animation: snip .25s ease forwards;
+  }
+  @keyframes snip { from { width: 0; left: 50%; } to { width: 100%; left: 0; } }
+
+  /* Lane Verdict Readout */
+  .verdict-banner {
+    min-height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 21px;
+    letter-spacing: .05em;
+    border: 1px dashed var(--steel2);
+    color: var(--dim);
+    background: var(--steel);
+    transition: all .15s ease;
+    padding: 4px 8px;
+    text-align: center;
+  }
+  .verdict-banner.safe {
+    background: #DCFCE7;
+    border: 1px solid var(--safe);
+    color: var(--safe);
+    box-shadow: 0 2px 10px rgba(22, 163, 74, 0.15);
+  }
+  .verdict-banner.danger {
+    background: #FEE2E2;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    box-shadow: 0 2px 10px rgba(220, 38, 38, 0.15);
+  }
+  .verdict-banner.malfunction {
+    background: #F3E8FF;
+    border: 1px solid var(--malfunc);
+    color: var(--malfunc);
+    font-size: 15px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 800;
+    box-shadow: 0 2px 10px rgba(126, 34, 206, 0.15);
+    animation: glitchPulse .5s infinite alternate;
+  }
+  @keyframes glitchPulse {
+    from { opacity: 0.85; transform: scale(0.99); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .raw-preview {
+    display: none;
+    margin-top: 6px;
+    font-size: 10px;
+    color: var(--dim);
+    background: #FFFFFF;
+    border: 1px solid var(--steel2);
+    border-radius: 4px;
+    padding: 4px 8px;
+    max-height: 48px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .raw-preview.show { display: block; }
+
+  /* Independent Lane Shakes */
+  .lane.shake { animation: laneShake .36s ease-in-out; }
+  @keyframes laneShake {
+    0%, 100% { transform: translate(0,0); }
+    20% { transform: translate(-8px, 4px) rotate(-.5deg); }
+    40% { transform: translate(8px, -4px) rotate(.5deg); }
+    60% { transform: translate(-6px, 3px) rotate(-.3deg); }
+    80% { transform: translate(6px, -2px) rotate(.3deg); }
+  }
+
+  /* Full Screen Flash for Big Moments */
+  .flash {
+    position: fixed; inset: 0; pointer-events: none; opacity: 0; z-index: 50;
+    transition: opacity .08s ease-out;
+  }
+  .flash.on { opacity: 1; transition: none; }
+  .flash.safe { background: radial-gradient(circle at 50% 40%, rgba(22, 163, 74, 0.25), transparent 70%); }
+  .flash.danger { background: radial-gradient(circle at 50% 40%, rgba(220, 38, 38, 0.25), transparent 70%); }
+
+  /* Head-to-Head End Card */
+  .endcard {
+    display: none;
+    text-align: center;
+    padding: 24px 20px;
+    border-radius: 16px;
+    border: 2px solid var(--steel2);
+    background: var(--bg1);
+    margin-top: 6px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  }
+  .endcard.show { display: block; }
+  .endcard-winner {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 7vw, 42px);
+    letter-spacing: .03em;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .endcard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .endcard-box {
+    border-radius: 10px;
+    padding: 14px 12px;
+    border: 1px solid var(--steel2);
+  }
+  .endcard-box.jev { background: var(--jev-soft); border-color: var(--jev-border); }
+  .endcard-box.nova { background: var(--nova-soft); border-color: var(--nova-border); }
+  .endcard-box h3 {
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 800;
+  }
+  .endcard-box.jev h3 { color: var(--jev-brand); }
+  .endcard-box.nova h3 { color: var(--nova-brand); }
+  .end-stats { font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
+  .end-stats b { font-weight: 800; }
+
+  .replay {
+    background: var(--ink);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 13px 28px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 19px;
+    letter-spacing: .05em;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+  }
+  .replay:hover { background: #1E293B; }
+
+  footer {
+    color: var(--dim);
+    font-size: 11px;
+    text-align: center;
+    margin-top: 18px;
+    line-height: 1.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lane.shake { animation: none; }
+    .wire { transition: none; }
+  }
+  /* Opponent selector */
+  .opponent-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #FFFFFF;
+    border: 1px solid var(--steel2);
+    border-radius: 10px;
+    padding: 6px 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .opp-label { font-size: 11px; font-weight: 800; color: var(--dim); letter-spacing: .05em; }
+  .opp-opt {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background .1s ease;
+  }
+  .opp-opt:hover { background: var(--steel); }
+  .opp-opt small { font-size: 9.5px; color: var(--dim); font-weight: 500; }
+  .opp-opt input { accent-color: var(--danger); }
+</style>
+</head>
+<body>
+<div class="flash" id="flash"></div>
+
+<div class="stage" id="stage">
+  <header>
+    <div class="eyebrow"><span class="pulse-dot"></span> Head-to-Head AI Defusal Race</div>
+    <h1 id="mainTitle">BOMB SQUAD: JEV VS. DEEPSEEK R1</h1>
+    <div class="subhead" id="mainSubhead">TypeSafe AI Jev (Vercel Gateway)<span class="vs">VS</span>AWS Bedrock DeepSeek R1</div>
+  </header>
+
+  <div class="setup" id="setup">
+    <div class="opponent-selector" id="opponentSelector">
+      <span class="opp-label">BEDROCK RACER:</span>
+      <label class="opp-opt">
+        <input type="radio" name="bedrockModel" value="deepseek" checked>
+        <span>DeepSeek R1 <small>(us.deepseek.r1-v1:0)</small></span>
+      </label>
+      <label class="opp-opt">
+        <input type="radio" name="bedrockModel" value="nova">
+        <span>Nova Micro <small>(amazon.nova-micro)</small></span>
+      </label>
+    </div>
+    <button class="startbtn" id="startBtn">ARM THE DUEL (6 OF 30 ROUNDS)</button>
+    <div class="err" id="err"></div>
+  </div>
+
+  <!-- Shared Clue Panel -->
+  <div class="clue-banner" id="clueBanner">
+    <div class="clue-top">
+      <span class="roundTag" id="roundTag">ROUND 1 / 6</span>
+      <span class="clue-title">ACTIVE DETONATION SEQUENCE</span>
+    </div>
+    <div class="clue-text" id="clueText">Awaiting arming sequence…</div>
+  </div>
+
+  <!-- Dual Lane Race Arena -->
+  <div class="arena" id="arena">
+    <!-- LANE 1: JEV -->
+    <div class="lane jev-lane" id="laneJev">
+      <div class="lane-head">
+        <span class="model-pill">JEV</span>
+        <span class="model-arch">TypeSafe • System One</span>
+      </div>
+
+      <div class="lane-hud">
+        <div class="cell"><span class="n" id="jevScore">0/0</span><span class="l">defused</span></div>
+        <div class="cell"><span class="n" id="jevStreak">0</span><span class="l">streak</span></div>
+        <div class="cell"><span class="n" id="jevAvg">0</span><span class="l">avg ms</span></div>
+      </div>
+
+      <div class="lane-timer-bar">
+        <div class="ring-wrap">
+          <svg width="40" height="40" viewBox="0 0 40 40">
+            <circle class="bg" cx="20" cy="20" r="16"/>
+            <circle class="fg" id="jevRingFg" cx="20" cy="20" r="16" stroke-dasharray="100.5" stroke-dashoffset="0"/>
+          </svg>
+        </div>
+        <div class="speed-tag">
+          DECISION LATENCY
+          <span class="ms-val" id="jevMs">-- ms</span>
+        </div>
+        <span class="fastest-badge" id="jevFastest">⚡ FIRST</span>
+      </div>
+
+      <div class="wires" id="jevWires"></div>
+      <div class="verdict-banner" id="jevVerdict">WAITING…</div>
+    </div>
+
+    <!-- LANE 2: BEDROCK OPPONENT (DEFAULT DEEPSEEK R1) -->
+    <div class="lane nova-lane" id="laneNova">
+      <div class="lane-head">
+        <span class="model-pill">DEEPSEEK R1</span>
+        <span class="model-arch">AWS Bedrock • us.deepseek.r1</span>
+      </div>
+
+      <div class="lane-hud">
+        <div class="cell"><span class="n" id="novaScore">0/0</span><span class="l">defused</span></div>
+        <div class="cell"><span class="n" id="novaStreak">0</span><span class="l">streak</span></div>
+        <div class="cell"><span class="n" id="novaAvg">0</span><span class="l">avg ms</span></div>
+      </div>
+
+      <div class="lane-timer-bar">
+        <div class="ring-wrap">
+          <svg width="40" height="40" viewBox="0 0 40 40">
+            <circle class="bg" cx="20" cy="20" r="16"/>
+            <circle class="fg" id="novaRingFg" cx="20" cy="20" r="16" stroke-dasharray="100.5" stroke-dashoffset="0"/>
+          </svg>
+        </div>
+        <div class="speed-tag">
+          DECISION LATENCY
+          <span class="ms-val" id="novaMs">-- ms</span>
+        </div>
+        <span class="fastest-badge" id="novaFastest">⚡ FIRST</span>
+      </div>
+
+      <div class="wires" id="novaWires"></div>
+      <div class="verdict-banner" id="novaVerdict">WAITING…</div>
+      <div class="raw-preview" id="novaRawPreview"></div>
+    </div>
+  </div>
+
+  <!-- Final Head-to-Head End Card -->
+  <div class="endcard" id="endcard">
+    <div class="endcard-winner" id="endWinner">—</div>
+    <div class="endcard-grid">
+      <div class="endcard-box jev">
+        <h3>JEV (TYPESAFE)</h3>
+        <div class="end-stats" id="jevEndStats">—</div>
+      </div>
+      <div class="endcard-box nova">
+        <h3>NOVA MICRO (BEDROCK)</h3>
+        <div class="end-stats" id="novaEndStats">—</div>
+      </div>
+    </div>
+    <button class="replay" id="replayBtn">RUN IT BACK</button>
+  </div>
+
+  <footer>
+    Real-time parallel race between Jev (TypeSafe System One API) and Amazon Nova Micro (AWS Bedrock Runtime in ap-south-1).
+    Decisions, latency, and parse reliability are live model executions.
+  </footer>
+</div>
+
+<script>
+const WIRE_COLORS = { red: 'var(--wire-red)', blue: 'var(--wire-blue)', yellow: 'var(--wire-yellow)', purple: 'var(--wire-purple)' };
+const WIRE_LABELS = { red: 'RED WIRE', blue: 'BLUE WIRE', yellow: 'YELLOW WIRE', purple: 'PURPLE WIRE' };
+
+// Scenarios loaded from external rounds.js (30 bomb defusal scenarios)
+const scenarios = (typeof ROUND_POOL !== 'undefined' && Array.isArray(ROUND_POOL) && ROUND_POOL.length > 0)
+  ? ROUND_POOL
+  : [
+      { clue:"Timer reads 00:04. The red wire runs straight into the display. The purple wire is loose, barely making contact.",
+        options:{ red:"Connects directly to the timer display", blue:"Faint hum", yellow:"Spliced twice", purple:"Loose, barely making contact" },
+        correct:"purple" }
+    ];
+
+function shuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+const ROUNDS_PER_GAME = 6;
+const RING_CIRC = 100.5;
+
+const el = id => document.getElementById(id);
+const stage = el('stage'), flash = el('flash'), setup = el('setup'), startBtn = el('startBtn'), errEl = el('err');
+const clueBanner = el('clueBanner'), roundTag = el('roundTag'), clueText = el('clueText');
+const arena = el('arena');
+
+// Jev Elements
+const laneJev = el('laneJev'), jevScore = el('jevScore'), jevStreak = el('jevStreak'), jevAvg = el('jevAvg');
+const jevRingFg = el('jevRingFg'), jevMs = el('jevMs'), jevFastest = el('jevFastest'), jevWires = el('jevWires'), jevVerdict = el('jevVerdict');
+
+// Nova Elements
+const laneNova = el('laneNova'), novaScore = el('novaScore'), novaStreak = el('novaStreak'), novaAvg = el('novaAvg');
+const novaRingFg = el('novaRingFg'), novaMs = el('novaMs'), novaFastest = el('novaFastest'), novaWires = el('novaWires'), novaVerdict = el('novaVerdict'), novaRawPreview = el('novaRawPreview');
+
+// Endcard Elements
+const endcard = el('endcard'), endWinner = el('endWinner'), jevEndStats = el('jevEndStats'), novaEndStats = el('novaEndStats'), replayBtn = el('replayBtn');
+
+let state = {
+  rounds: [],
+  idx: 0,
+  jev: { correct: 0, streak: 0, bestStreak: 0, totalMs: 0 },
+  nova: { correct: 0, streak: 0, bestStreak: 0, totalMs: 0, malfunctions: 0 }
+};
+
+function doFlash(kind){
+  flash.className = 'flash ' + kind + ' on';
+  requestAnimationFrame(() => requestAnimationFrame(() => { flash.className = 'flash ' + kind; }));
+}
+
+function doShake(laneEl){
+  laneEl.classList.remove('shake');
+  void laneEl.offsetWidth;
+  laneEl.classList.add('shake');
+}
+
+function setRing(ringEl, fraction){
+  const offset = RING_CIRC * (1 - fraction);
+  ringEl.style.strokeDashoffset = offset;
+}
+
+function renderLaneWires(container, options){
+  container.innerHTML = '';
+  Object.keys(options).forEach(key => {
+    const w = document.createElement('div');
+    w.className = 'wire';
+    w.dataset.wire = key;
+    w.innerHTML = `<div class="strand" style="background:${WIRE_COLORS[key]}"></div>
+                   <div class="label">${WIRE_LABELS[key]}</div>
+                   <div class="stamp"></div>`;
+    container.appendChild(w);
+  });
+}
+
+function getApiBase(){
+  return window.location.port === '3000' ? '' : 'http://localhost:3000';
+}
+
+async function callJev(round){
+  const t0 = performance.now();
+  const res = await fetch(`${getApiBase()}/api/jev`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'typesafe-ai/jev',
+      state: round.clue,
+      questions: { wire: { type: 'choice', instructions: 'Which wire should be cut to defuse the bomb?', criteria: round.options } }
+    })
+  });
+  const clientMs = Math.round(performance.now() - t0);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data?.error?.message || data?.error || 'HTTP ' + res.status);
+  return {
+    choice: data.choice,
+    confidence: data.confidence || 0,
+    ms: data.ms || clientMs,
+    raw: data.raw
+  };
+}
+
+function getSelectedBedrockModel(){
+  const checked = document.querySelector('input[name="bedrockModel"]:checked');
+  return checked ? checked.value : 'deepseek';
+}
+
+async function callBedrockOpponent(round){
+  const modelType = getSelectedBedrockModel();
+  const endpoint = modelType === 'deepseek' ? '/api/deepseek' : '/api/nova';
+  const t0 = performance.now();
+  const res = await fetch(`${getApiBase()}${endpoint}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ clue: round.clue, options: round.options })
+  });
+  const clientMs = Math.round(performance.now() - t0);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data?.message || data?.error || 'HTTP ' + res.status);
+  return {
+    choice: data.choice,
+    confidence: data.confidence || 0,
+    ms: data.ms || clientMs,
+    error: data.error,
+    raw: data.raw,
+    reasoning: data.reasoning
+  };
+}
+
+async function playRound(round, idx){
+  const modelType = getSelectedBedrockModel();
+  const opponentName = modelType === 'deepseek' ? 'DEEPSEEK R1' : 'NOVA MICRO';
+  const opponentArch = modelType === 'deepseek' ? 'AWS Bedrock • us.deepseek.r1' : 'AWS Bedrock • amazon.nova';
+
+  laneNova.querySelector('.model-pill').textContent = opponentName;
+  laneNova.querySelector('.model-arch').textContent = opponentArch;
+
+  roundTag.textContent = `ROUND ${idx + 1} / ${state.rounds.length}`;
+  clueText.textContent = round.clue;
+
+  // Reset lane elements
+  jevVerdict.className = 'verdict-banner'; jevVerdict.textContent = 'DEFUSING…';
+  novaVerdict.className = 'verdict-banner'; novaVerdict.textContent = 'DEFUSING…';
+  novaRawPreview.className = 'raw-preview'; novaRawPreview.textContent = '';
+  jevFastest.classList.remove('show');
+  novaFastest.classList.remove('show');
+
+  renderLaneWires(jevWires, round.options);
+  renderLaneWires(novaWires, round.options);
+
+  // Animate rings
+  const COUNTDOWN_MS = 6000;
+  jevRingFg.style.transition = 'none'; novaRingFg.style.transition = 'none';
+  setRing(jevRingFg, 1); setRing(novaRingFg, 1);
+  jevMs.textContent = '0 ms'; novaMs.textContent = '0 ms';
+  void jevRingFg.offsetWidth; void novaRingFg.offsetWidth;
+  jevRingFg.style.transition = `stroke-dashoffset 800ms linear`;
+  novaRingFg.style.transition = `stroke-dashoffset ${COUNTDOWN_MS}ms linear`;
+  setRing(jevRingFg, 0); setRing(novaRingFg, 0);
+
+  const startT = performance.now();
+  let jevDone = false;
+  let oppDone = false;
+  let firstFinished = null;
+
+  const timerInterval = setInterval(() => {
+    const elapsed = Math.round(performance.now() - startT);
+    if (!jevDone) jevMs.textContent = `${elapsed} ms`;
+    if (!oppDone) novaMs.textContent = `${elapsed} ms`;
+  }, 35);
+
+  // LANE 1: JEV ASYNC RESOLUTION (Immediate UI feedback)
+  const jevPromise = callJev(round).then(jevData => {
+    jevDone = true;
+    if (!firstFinished) {
+      firstFinished = 'jev';
+      jevFastest.classList.add('show');
+    }
+    jevRingFg.style.transition = 'none';
+    setRing(jevRingFg, 0);
+    jevMs.textContent = `${jevData.ms} ms`;
+    state.jev.totalMs += jevData.ms;
+
+    const isJevCorrect = jevData.choice === round.correct;
+    const wireEl = jevWires.querySelector(`[data-wire="${jevData.choice}"]`);
+
+    if (wireEl) {
+      wireEl.classList.add('chosen', isJevCorrect ? 'correct' : 'wrong', 'cut');
+      wireEl.querySelector('.stamp').textContent = `${Math.round((jevData.confidence || 0) * 100)}%`;
+    }
+
+    if (isJevCorrect) {
+      jevVerdict.textContent = 'DEFUSED';
+      jevVerdict.classList.add('safe');
+      state.jev.correct++;
+      state.jev.streak++;
+      state.jev.bestStreak = Math.max(state.jev.bestStreak, state.jev.streak);
+      doFlash('safe');
+    } else {
+      jevVerdict.textContent = 'BOOM (WRONG WIRE)';
+      jevVerdict.classList.add('danger');
+      state.jev.streak = 0;
+      doShake(laneJev);
+    }
+
+    jevScore.textContent = `${state.jev.correct}/${idx + 1}`;
+    jevStreak.textContent = state.jev.streak;
+    jevAvg.textContent = Math.round(state.jev.totalMs / (idx + 1));
+    return jevData;
+  }).catch(err => {
+    jevDone = true;
+    jevMs.textContent = 'ERR';
+    jevVerdict.textContent = 'CONNECTION ERROR';
+    jevVerdict.classList.add('danger');
+    doShake(laneJev);
+    throw err;
+  });
+
+  // LANE 2: BEDROCK OPPONENT ASYNC RESOLUTION (Immediate UI feedback)
+  const oppPromise = callBedrockOpponent(round).then(novaData => {
+    oppDone = true;
+    if (!firstFinished) {
+      firstFinished = 'opp';
+      novaFastest.classList.add('show');
+    }
+    novaRingFg.style.transition = 'none';
+    setRing(novaRingFg, 0);
+    novaMs.textContent = `${novaData.ms} ms`;
+    state.nova.totalMs += novaData.ms;
+
+    if (novaData.error === 'parse_failed') {
+      state.nova.malfunctions++;
+      state.nova.streak = 0;
+      novaVerdict.textContent = '⚠️ MALFUNCTION (PARSE DRIFT)';
+      novaVerdict.classList.add('malfunction');
+      const snippet = typeof novaData.raw === 'string' ? novaData.raw.slice(0, 160) : JSON.stringify(novaData.raw);
+      novaRawPreview.textContent = `Response format drifted:\n${snippet}...`;
+      novaRawPreview.classList.add('show');
+      doShake(laneNova);
+    } else {
+      const isNovaCorrect = novaData.choice === round.correct;
+      const wireEl = novaWires.querySelector(`[data-wire="${novaData.choice}"]`);
+
+      if (wireEl) {
+        wireEl.classList.add('chosen', isNovaCorrect ? 'correct' : 'wrong', 'cut');
+        wireEl.querySelector('.stamp').textContent = `${Math.round((novaData.confidence || 0) * 100)}%`;
+      }
+
+      if (isNovaCorrect) {
+        novaVerdict.textContent = 'DEFUSED';
+        novaVerdict.classList.add('safe');
+        state.nova.correct++;
+        state.nova.streak++;
+        state.nova.bestStreak = Math.max(state.nova.bestStreak, state.nova.streak);
+        doFlash('safe');
+      } else {
+        novaVerdict.textContent = 'BOOM (WRONG WIRE)';
+        novaVerdict.classList.add('danger');
+        state.nova.streak = 0;
+        doShake(laneNova);
+      }
+    }
+
+    novaScore.textContent = `${state.nova.correct}/${idx + 1}`;
+    novaStreak.textContent = state.nova.streak;
+    novaAvg.textContent = Math.round(state.nova.totalMs / (idx + 1));
+    return novaData;
+  }).catch(err => {
+    oppDone = true;
+    novaMs.textContent = 'ERR';
+    novaVerdict.textContent = 'BEDROCK ERROR';
+    novaVerdict.classList.add('danger');
+    doShake(laneNova);
+    throw err;
+  });
+
+  // Await both models settling before finishing the round
+  try {
+    await Promise.allSettled([jevPromise, oppPromise]);
+  } finally {
+    clearInterval(timerInterval);
+  }
+}
+
+async function runGame(){
+  errEl.textContent = '';
+  startBtn.disabled = true;
+  setup.style.display = 'none';
+  clueBanner.classList.add('show');
+  arena.classList.add('show');
+  endcard.classList.remove('show');
+
+  state = {
+    rounds: shuffle(scenarios).slice(0, ROUNDS_PER_GAME),
+    idx: 0,
+    jev: { correct: 0, streak: 0, bestStreak: 0, totalMs: 0 },
+    nova: { correct: 0, streak: 0, bestStreak: 0, totalMs: 0, malfunctions: 0 }
+  };
+
+  jevScore.textContent = '0/0'; jevStreak.textContent = '0'; jevAvg.textContent = '0';
+  novaScore.textContent = '0/0'; novaStreak.textContent = '0'; novaAvg.textContent = '0';
+
+  for (let i = 0; i < state.rounds.length; i++) {
+    try {
+      await playRound(state.rounds[i], i);
+    } catch(e) {
+      errEl.textContent = 'Round error: ' + e.message;
+      break;
+    }
+    await new Promise(r => setTimeout(r, 650));
+  }
+
+  // Render Endcard
+  clueBanner.classList.remove('show');
+  arena.classList.remove('show');
+
+  const jevAvgMs = Math.round(state.jev.totalMs / state.rounds.length);
+  const novaAvgMs = Math.round(state.nova.totalMs / state.rounds.length);
+
+  jevEndStats.innerHTML = `
+    Score: <b>${state.jev.correct}/${state.rounds.length} DEFUSED</b><br>
+    Best Streak: <b>${state.jev.bestStreak}</b><br>
+    Avg Decision Time: <b>${jevAvgMs} ms</b><br>
+    Reliability: <b>100% Strict Schema</b>
+  `;
+
+  const modelType = getSelectedBedrockModel();
+  const oppLabel = modelType === 'deepseek' ? 'DEEPSEEK R1 (BEDROCK)' : 'NOVA MICRO (BEDROCK)';
+  const oppShort = modelType === 'deepseek' ? 'DEEPSEEK R1' : 'NOVA MICRO';
+  el('endcard').querySelector('.endcard-box.nova h3').textContent = oppLabel;
+
+  novaEndStats.innerHTML = `
+    Score: <b>${state.nova.correct}/${state.rounds.length} DEFUSED</b><br>
+    Best Streak: <b>${state.nova.bestStreak}</b><br>
+    Avg Decision Time: <b>${novaAvgMs} ms</b><br>
+    Parse Failures: <b>${state.nova.malfunctions} format drifts</b>
+  `;
+
+  if (state.jev.correct > state.nova.correct) {
+    endWinner.textContent = `🏆 JEV WINS BY ACCURACY (${state.jev.correct} VS ${state.nova.correct})`;
+  } else if (state.nova.correct > state.jev.correct) {
+    endWinner.textContent = `🏆 ${oppShort} WINS BY ACCURACY (${state.nova.correct} VS ${state.jev.correct})`;
+  } else {
+    if (jevAvgMs < novaAvgMs) {
+      endWinner.textContent = `🏆 JEV WINS ON SPEED (${jevAvgMs}ms vs ${novaAvgMs}ms)`;
+    } else {
+      endWinner.textContent = `🏆 DRAW (${state.jev.correct}/${state.rounds.length} Defused)`;
+    }
+  }
+
+  endcard.classList.add('show');
+  startBtn.disabled = false;
+}
+
+startBtn.addEventListener('click', runGame);
+replayBtn.addEventListener('click', () => {
+  endcard.classList.remove('show');
+  setup.style.display = 'flex';
+});
+
+document.querySelectorAll('input[name="bedrockModel"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    const modelType = getSelectedBedrockModel();
+    const opponentName = modelType === 'deepseek' ? 'DEEPSEEK R1' : 'NOVA MICRO';
+    const opponentArch = modelType === 'deepseek' ? 'AWS Bedrock • us.deepseek.r1' : 'AWS Bedrock • amazon.nova';
+    el('mainTitle').textContent = `BOMB SQUAD: JEV VS. ${opponentName}`;
+    el('mainSubhead').innerHTML = `TypeSafe AI Jev (Vercel Gateway)<span class="vs">VS</span>AWS Bedrock ${opponentName}`;
+    laneNova.querySelector('.model-pill').textContent = opponentName;
+    laneNova.querySelector('.model-arch').textContent = opponentArch;
+  });
+});
+</script>
+</body>
+</html>

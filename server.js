@@ -237,5 +237,60 @@ Options: ${JSON.stringify(options)}`;
   }
 });
 
+app.post("/api/deepseek-v3", async (req, res) => {
+  const { clue, options } = req.body;
+  if (!clue || !options) {
+    return res.status(400).json({ error: "Missing clue or options in request body." });
+  }
+
+  const prompt = `Given this clue and these wire options, respond with ONLY valid JSON: {"choice": "<wire_key>", "confidence": <0-1 number>}. No explanation, no markdown.
+Clue: ${clue}
+Options: ${JSON.stringify(options)}`;
+
+  const t0 = performance.now();
+  try {
+    const cmd = new ConverseCommand({
+      modelId: "deepseek.v3.2",
+      messages: [{ role: "user", content: [{ text: prompt }] }],
+      inferenceConfig: { maxTokens: 400, temperature: 0.1 }
+    });
+
+    const result = await bedrockDeepSeekClient.send(cmd);
+    const ms = Math.round(performance.now() - t0);
+
+    const contents = result?.output?.message?.content || [];
+    const textBlock = contents.find(c => c.text);
+    const contentText = textBlock?.text?.trim() || "";
+
+    // Extract JSON
+    let jsonMatch = contentText;
+    const fenceMatch = contentText.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+    if (fenceMatch) {
+      jsonMatch = fenceMatch[1];
+    } else {
+      const objMatch = contentText.match(/\{[\s\S]*\}/);
+      if (objMatch) jsonMatch = objMatch[0];
+    }
+
+    try {
+      const decision = JSON.parse(jsonMatch);
+      if (!decision || typeof decision.choice !== "string") {
+        return res.json({ error: "parse_failed", raw: contentText, ms });
+      }
+      return res.json({
+        choice: decision.choice.toLowerCase().trim(),
+        confidence: typeof decision.confidence === "number" ? decision.confidence : 0.9,
+        ms,
+        raw: contentText,
+      });
+    } catch (parseErr) {
+      return res.json({ error: "parse_failed", raw: contentText, ms });
+    }
+  } catch (err) {
+    const ms = Math.round(performance.now() - t0);
+    return res.status(502).json({ error: "bedrock_v3_error", message: err.message, ms });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Bomb Squad server running at http://localhost:${PORT}`));

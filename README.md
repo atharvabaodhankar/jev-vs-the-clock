@@ -34,7 +34,7 @@ In bomb disposal, every millisecond counts. This demo dramatizes the trade-offs 
 - **💥 Overthinking & Schema Drift Detection**: If a reasoning model runs out of time or wanders into conversational preamble, the UI triggers a distinct **⚠️ OVERTHINK DRIFT / MALFUNCTION** state with a live terminal snippet of the raw output.
 - **🔊 Procedural Web Audio Engine**: 100% synthesized sound effects via the Web Audio API (accelerating geiger ticks, wire-snip electric zaps, heavy sub-bass 808 detonations, and victory chimes) — zero external MP3/WAV assets required.
 - **✨ Canvas Particle Sparks & Screen Shakes**: Live 60 FPS HTML5 Canvas particle system generating electric sparks when wires are snipped, plus directional camera shakes and flash strobes on detonation.
-- **🕹️ Dual Opponent Selector**: Toggle between **DeepSeek R1** (`us.deepseek.r1-v1:0`) and **Amazon Nova Micro** (`amazon.nova-micro-v1:0`) directly from the tactical dock.
+- **🕹️ Triple Opponent Selector**: Toggle between **DeepSeek R1** (`us.deepseek.r1-v1:0` System 2 CoT), **DeepSeek V3.2** (`deepseek.v3.2` General MoE), and **Amazon Nova Micro** (`amazon.nova-micro-v1:0`) directly from the tactical dock.
 - **📦 30 Hand-Crafted Bomb Scenarios**: Stored in a modular dataset (`rounds.js`) spanning mercury tilt switches, optical laser sensors, barometric altitude fuses, cold solder joints, RF antenna wires, and UV-reactive markings.
 - **🏆 Esports Championship End Card**: Side-by-side victory summary detailing accuracy scores, best streaks, average reaction times, and schema reliability.
 
@@ -48,7 +48,8 @@ In bomb disposal, every millisecond counts. This demo dramatizes the trade-offs 
                  │              http://localhost:3000                     │
                  └───────────────────▲─────────────────▲──────────────────┘
                                      │                 │
-                     POST /api/jev   │                 │   POST /api/deepseek
+                     POST /api/jev   │                 │   POST /api/deepseek,
+                                     │                 │   /api/deepseek-v3,
                                      │                 │   or /api/nova
                  ┌───────────────────▼─────────────────▼──────────────────┐
                  │                 Local Express Server                    │

@@ -178,6 +178,9 @@
   .opp-tab.selected.tab-r1 {
     background: #FF4D00; color: #FFFFFF; box-shadow: 0 0 18px rgba(255, 77, 0, 0.45);
   }
+  .opp-tab.selected.tab-v3 {
+    background: #7928CA; color: #FFFFFF; box-shadow: 0 0 18px rgba(121, 40, 202, 0.45);
+  }
   .opp-tab.selected.tab-nova {
     background: #0066FF; color: #FFFFFF; box-shadow: 0 0 18px rgba(0, 102, 255, 0.45);
   }
@@ -616,11 +619,15 @@
     <div class="opp-tabs" id="oppTabs">
       <label class="opp-tab tab-r1 selected" id="tabR1">
         <input type="radio" name="bedrockModel" value="deepseek" checked>
-        <span>🧠 DEEPSEEK R1 (AWS BEDROCK)</span>
+        <span>🧠 DEEPSEEK R1 (REASONING)</span>
+      </label>
+      <label class="opp-tab tab-v3" id="tabV3">
+        <input type="radio" name="bedrockModel" value="deepseek-v3">
+        <span>⚡ DEEPSEEK V3.2 (GENERAL MOE)</span>
       </label>
       <label class="opp-tab tab-nova" id="tabNova">
         <input type="radio" name="bedrockModel" value="nova">
-        <span>⚡ NOVA MICRO (AWS BEDROCK)</span>
+        <span>🚀 NOVA MICRO (MICRO LLM)</span>
       </label>
     </div>
 
@@ -1112,16 +1119,35 @@ function getSelectedBedrockModel() {
 
 function updateOpponentUI() {
   const modelType = getSelectedBedrockModel();
-  const isDeepSeek = modelType === 'deepseek';
+  const isR1 = modelType === 'deepseek';
+  const isV3 = modelType === 'deepseek-v3';
+  const isNova = modelType === 'nova';
 
-  el('tabR1').classList.toggle('selected', isDeepSeek);
-  el('tabNova').classList.toggle('selected', !isDeepSeek);
+  el('tabR1').classList.toggle('selected', isR1);
+  el('tabV3').classList.toggle('selected', isV3);
+  el('tabNova').classList.toggle('selected', isNova);
 
-  const titleName = isDeepSeek ? 'DEEPSEEK R1' : 'NOVA MICRO';
+  let titleName = 'DEEPSEEK R1';
+  let tagName = '🧠 DEEPSEEK R1';
+  let archName = 'SYSTEM 2 // REASONING CORE';
+  let podiumHTML = '🧠 DEEPSEEK R1 <span class="arch-chip">REASONING</span>';
+
+  if (isV3) {
+    titleName = 'DEEPSEEK V3.2';
+    tagName = '⚡ DEEPSEEK V3.2';
+    archName = 'GENERAL MOE // ~1700MS REFLEX';
+    podiumHTML = '⚡ DEEPSEEK V3.2 <span class="arch-chip">GENERAL MOE</span>';
+  } else if (isNova) {
+    titleName = 'NOVA MICRO';
+    tagName = '🚀 NOVA MICRO';
+    archName = 'MICRO LLM // ~650MS LATENCY';
+    podiumHTML = '🚀 NOVA MICRO <span class="arch-chip">MICRO LLM</span>';
+  }
+
   el('racerTitle').textContent = titleName;
-  racerTag.textContent = isDeepSeek ? '🧠 DEEPSEEK R1' : '⚡ NOVA MICRO';
-  racerArch.textContent = isDeepSeek ? 'SYSTEM 2 // REASONING CORE' : 'FAST LLM // MICRO LATENCY';
-  racerPodiumTitle.innerHTML = isDeepSeek ? '🧠 DEEPSEEK R1 <span class="arch-chip">REASONING</span>' : '⚡ NOVA MICRO <span class="arch-chip">FAST LLM</span>';
+  racerTag.textContent = tagName;
+  racerArch.textContent = archName;
+  racerPodiumTitle.innerHTML = podiumHTML;
 }
 
 document.querySelectorAll('input[name="bedrockModel"]').forEach(radio => {
@@ -1141,8 +1167,8 @@ el('audioToggle').addEventListener('click', () => {
 });
 
 // Hover SFX on buttons & tabs
-[startBtn, replayBtn, el('tabR1'), el('tabNova')].forEach(btn => {
-  btn.addEventListener('mouseenter', () => playHoverSound());
+[startBtn, replayBtn, el('tabR1'), el('tabV3'), el('tabNova')].forEach(btn => {
+  if (btn) btn.addEventListener('mouseenter', () => playHoverSound());
 });
 
 function getApiBase() {
@@ -1215,7 +1241,10 @@ async function callJev(round) {
 
 async function callBedrockOpponent(round) {
   const modelType = getSelectedBedrockModel();
-  const endpoint = modelType === 'deepseek' ? '/api/deepseek' : '/api/nova';
+  let endpoint = '/api/deepseek';
+  if (modelType === 'deepseek-v3') endpoint = '/api/deepseek-v3';
+  if (modelType === 'nova') endpoint = '/api/nova';
+
   const t0 = performance.now();
   const res = await fetch(`${getApiBase()}${endpoint}`, {
     method: 'POST',
@@ -1424,7 +1453,9 @@ async function runGame() {
   const jevAvgMs = Math.round(state.jev.totalMs / state.rounds.length);
   const racerAvgMs = Math.round(state.racer.totalMs / state.rounds.length);
   const modelType = getSelectedBedrockModel();
-  const oppShort = modelType === 'deepseek' ? 'DEEPSEEK R1' : 'NOVA MICRO';
+  let oppShort = 'DEEPSEEK R1';
+  if (modelType === 'deepseek-v3') oppShort = 'DEEPSEEK V3.2';
+  if (modelType === 'nova') oppShort = 'NOVA MICRO';
 
   jevEndScore.textContent = `${state.jev.correct}/${state.rounds.length}`;
   jevEndStreak.textContent = state.jev.bestStreak;

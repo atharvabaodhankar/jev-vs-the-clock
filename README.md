@@ -7,7 +7,17 @@
 ![Node](https://img.shields.io/badge/Node.js-18%2B-339933?style=for-the-badge&logo=node.js)
 ![Express](https://img.shields.io/badge/Express-Local%20Proxy-000000?style=for-the-badge&logo=express)
 ![Vercel AI Gateway](https://img.shields.io/badge/Vercel_AI_Gateway-Jev-black?style=for-the-badge&logo=vercel)
-![AWS Bedrock](https://img.shields.io/badge/AWS_Bedrock-DeepSeek_R1_%7C_Nova-FF9900?style=for-the-badge&logo=amazon-aws)
+![AWS Bedrock](https://img.shields.io/badge/AWS_Bedrock-DeepSeek_R1_%7C_V3.2_%7C_Nova-FF9900?style=for-the-badge&logo=amazon-aws)
+
+---
+
+## 🎬 Live Gameplay Demo
+
+<p align="center">
+  <video src="bomb-squad-demo.mp4" width="100%" controls autoplay loop muted></video>
+</p>
+
+> 📹 **Watch Direct Video**: [`bomb-squad-demo.mp4`](./bomb-squad-demo.mp4)
 
 ---
 
